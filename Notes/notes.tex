@@ -1,0 +1,66 @@
+\documentclass{article}        % 1. Document class (Preamble)
+\usepackage{graphicx}          % 2. Packages (Preamble)
+\usepackage{minted}
+
+\title{Handwriting Model}
+\author{By: Jia Jie}
+
+\begin{document}               % <--- Body starts here
+\maketitle
+
+\tableofcontents
+\newpage
+\section {KNN Train Test Split}
+
+
+\newpage
+\section {Explaining Folds}
+* Remember in 100\% of data, when do train split, it's usually 70\% 
+data for training and 30\% testing.
+\vspace{5px}
+
+\begin{center} 
+    In that 70\% of training data:
+\end{center} 
+
+\begin{center}
+\begin{minted}{python}
+    from sklearn.model_selection import KFold
+    folds = KFold(n_splits = 5, shuffle = true, random_state = 42)
+\end{minted}
+\end{center}
+
+How it works?
+\begin{itemize}
+    \item Let's say we have 700 pictures. We divide these into 140 pictures in each chunk.
+    \item So we have 1,2,3,4,5 chunk.
+    \item let k (not n splits) is 3, in this iteration, 1,2,3,4,5 is randomized
+    \item For first round (1), 1,2,3,4 is Fold used for training, and 5 is used for validation
+    \item Goes on until five rounds, validation data helps choose K
+\end{itemize}
+\begin{figure}[htbp]
+    \centering % Centers the image on the page
+    \includegraphics[scale=0.4]{KFold.png} % Insert file name without extension
+    \label{fig:my_image} % Used to cross-reference this figure in text
+\end{figure}
+
+**Note: This is only setting the instructions of loading the data for one k-value!
+\newpage
+
+\section {Explaining GridSearch CV}
+\begin{minted}{python}
+from sklearn.model_selection import GridSearchCV
+optimal_k = GridSearchCV(
+    estimator=KNeighborsClassifier(),
+    param_grid={"n_neighbors": range(1, 30)},
+    cv=folds,
+)
+\end{minted}
+
+\begin{itemize}
+    \item The KFold is where each k is tested. 
+    \item It runs each k, and each k runs KFold.
+    \item Repeats until each iteration is done.
+    \item Note that the code above hasn't load the data yet, it's just setting the instructions
+\end{itemize}
+\end{document}              
